@@ -1,3 +1,4 @@
+import { SportKey } from "@/core/constants/sports";
 import { WorkoutType } from "@/core/constants/workoutTypes";
 
 export interface Workout {
@@ -6,7 +7,7 @@ export interface Workout {
   id: string;
   notes?: string;
   orderIndex: number;
-  sportId: string;
+  sportId: SportKey;
   targetDistanceKm?: number;
   targetDurationMin?: number;
   targetZone?: string;

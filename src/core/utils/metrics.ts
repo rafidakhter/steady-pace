@@ -9,3 +9,7 @@ export function average(values: number[]) {
 
   return sum(values) / values.length;
 }
+
+export function safeNumber(value?: number) {
+  return value ?? 0;
+}

@@ -1,5 +1,7 @@
+import { SportCategoryKey } from "@/core/constants/sports";
+
 export interface Challenge {
-  category: "run" | "triathlon" | "bike" | "custom";
+  category: SportCategoryKey;
   description: string;
   estimatedDurationLabel: string;
   id: string;
