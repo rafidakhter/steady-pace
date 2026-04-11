@@ -1,12 +1,5 @@
-import { Screen } from "@/components/ui/Screen";
-import { Text } from "@/components/ui/Text";
+import { ProgressScreen } from "@/features/progress/components";
 
 export default function ProgressRoute() {
-  return (
-    <Screen subtitle="Tabs scaffold" title="Progress">
-      <Text tone="muted" variant="body">
-        Progress route placeholder.
-      </Text>
-    </Screen>
-  );
+  return <ProgressScreen />;
 }

@@ -1,12 +1,5 @@
-import { Screen } from "@/components/ui/Screen";
-import { Text } from "@/components/ui/Text";
+import { PlanScreen } from "@/features/plan/components";
 
 export default function PlanRoute() {
-  return (
-    <Screen subtitle="Tabs scaffold" title="Plan">
-      <Text tone="muted" variant="body">
-        Weekly plan route placeholder.
-      </Text>
-    </Screen>
-  );
+  return <PlanScreen />;
 }
