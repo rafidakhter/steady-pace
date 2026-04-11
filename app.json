@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "steady pace",
+    "slug": "steady-pace",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
