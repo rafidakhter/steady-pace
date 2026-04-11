@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { View } from "react-native";
 
@@ -7,12 +8,19 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Text } from "@/components/ui/Text";
+import { useAppStore } from "@/store/appStore";
+import { useAuthStore } from "@/store/authStore";
 
+import { useAppSession } from "../hooks";
 import { SignUpFormValues, signUpSchema } from "../validators/authSchemas";
 import { AuthScreenShell } from "./AuthScreenShell";
 
 export function SignUpScreen() {
   const router = useRouter();
+  const signUp = useAuthStore((state) => state.signUp);
+  const hasActivePlan = useAppStore((state) => Boolean(state.selectedChallengeId && state.activePlanId && state.planStartDate));
+  const { hydrated, isAuthenticated } = useAppSession();
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const {
     control,
     formState: { errors, isSubmitting },
@@ -26,8 +34,20 @@ export function SignUpScreen() {
     resolver: zodResolver(signUpSchema)
   });
 
-  const onSubmit = handleSubmit(async () => {
-    router.push("../(onboarding)/select-challenge");
+  if (hydrated && isAuthenticated) {
+    return <Redirect href={hasActivePlan ? "../(tabs)/home" : "../(onboarding)/select-challenge"} />;
+  }
+
+  const onSubmit = handleSubmit(async (values) => {
+    setSubmitError(null);
+    const result = signUp(values);
+
+    if (!result.ok) {
+      setSubmitError(result.error ?? "Something went wrong while creating your account.");
+      return;
+    }
+
+    router.replace("/");
   });
 
   return (
@@ -40,6 +60,11 @@ export function SignUpScreen() {
     >
       <Card>
         <View style={{ gap: 16 }}>
+          {submitError ? (
+            <Text tone="danger" variant="body">
+              {submitError}
+            </Text>
+          ) : null}
           <Controller
             control={control}
             name="name"

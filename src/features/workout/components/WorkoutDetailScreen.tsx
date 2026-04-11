@@ -1,4 +1,7 @@
-import { useRouter } from "expo-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Redirect, useRouter } from "expo-router";
+import { useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
 import { View } from "react-native";
 
 import { CompletionBadge } from "@/components/CompletionBadge";
@@ -10,8 +13,11 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { Screen } from "@/components/ui/Screen";
 import { Text } from "@/components/ui/Text";
+import { useAppSession } from "@/features/auth/hooks";
+import { useWorkoutStore } from "@/store/workoutStore";
 
 import { useWorkoutDetailScreenData } from "../hooks/useWorkoutDetailScreenData";
+import { WorkoutLogFormValues, workoutLogSchema } from "../validators";
 
 interface WorkoutDetailScreenProps {
   workoutId?: string;
@@ -19,7 +25,57 @@ interface WorkoutDetailScreenProps {
 
 export function WorkoutDetailScreen({ workoutId }: WorkoutDetailScreenProps) {
   const router = useRouter();
-  const { completion, log, workout } = useWorkoutDetailScreenData(workoutId);
+  const { hasActivePlan: sessionHasActivePlan, hydrated, isAuthenticated } = useAppSession();
+  const saveWorkoutLog = useWorkoutStore((state) => state.saveWorkoutLog);
+  const markComplete = useWorkoutStore((state) => state.markComplete);
+  const { completion, hasActivePlan, log, workout } = useWorkoutDetailScreenData(workoutId);
+  const [savedMessage, setSavedMessage] = useState<string | null>(null);
+  const defaultValues = useMemo<WorkoutLogFormValues>(
+    () => ({
+      actualDistanceKm: log?.actualDistanceKm?.toString() ?? "",
+      actualDurationMin: log?.actualDurationMin?.toString() ?? "",
+      notes: log?.notes ?? ""
+    }),
+    [log?.actualDistanceKm, log?.actualDurationMin, log?.notes]
+  );
+  const {
+    formState: { errors, isSubmitting },
+    handleSubmit,
+    reset,
+    setValue,
+    watch
+  } = useForm<WorkoutLogFormValues>({
+    defaultValues,
+    resolver: zodResolver(workoutLogSchema)
+  });
+  const actualDistanceKm = watch("actualDistanceKm") ?? "";
+  const actualDurationMin = watch("actualDurationMin") ?? "";
+  const notes = watch("notes") ?? "";
+
+  useEffect(() => {
+    reset(defaultValues);
+  }, [defaultValues, reset]);
+
+  if (hydrated && !isAuthenticated) {
+    return <Redirect href="../(auth)/sign-in" />;
+  }
+
+  if (hydrated && !sessionHasActivePlan) {
+    return <Redirect href="../(onboarding)/select-challenge" />;
+  }
+
+  if (!hasActivePlan) {
+    return (
+      <Screen subtitle="Workout" title="Workout detail">
+        <EmptyState
+          actionLabel="Choose challenge"
+          description="You need an active challenge before workouts can be opened."
+          onActionPress={() => router.push("../(onboarding)/select-challenge")}
+          title="No active plan"
+        />
+      </Screen>
+    );
+  }
 
   if (!workout) {
     return (
@@ -34,9 +90,26 @@ export function WorkoutDetailScreen({ workoutId }: WorkoutDetailScreenProps) {
     );
   }
 
+  const onSubmit = handleSubmit(async (values) => {
+    if (workout.type === "rest") {
+      markComplete(workout.id);
+      setSavedMessage("Rest day marked complete.");
+      return;
+    }
+
+    saveWorkoutLog({
+      actualDistanceKm: values.actualDistanceKm ? Number(values.actualDistanceKm) : undefined,
+      actualDurationMin: values.actualDurationMin ? Number(values.actualDurationMin) : undefined,
+      completed: true,
+      notes: values.notes?.trim() ? values.notes.trim() : undefined,
+      workoutId: workout.id
+    });
+    setSavedMessage("Workout saved locally.");
+  });
+
   return (
     <Screen
-      footer={<Button disabled label="Logging connects in Phase 6" />}
+      footer={<Button label={workout.type === "rest" ? "Mark rest day complete" : "Save workout"} loading={isSubmitting} onPress={onSubmit} />}
       subtitle={`Week ${workout.weekNumber} • ${workout.dayKey}`}
       title={workout.title}
     >
@@ -61,17 +134,29 @@ export function WorkoutDetailScreen({ workoutId }: WorkoutDetailScreenProps) {
       <Card>
         <View style={{ gap: 12 }}>
           <Text variant="title">Completion</Text>
-          <ProgressBar currentLabel={`${completion}%`} label="Preview progress" progress={completion} targetLabel="100%" />
+          <ProgressBar currentLabel={`${completion}%`} label="Workout progress" progress={completion} targetLabel="100%" />
         </View>
       </Card>
 
       <Card>
         <View style={{ gap: 12 }}>
           <Text variant="title">Workout log</Text>
+          {savedMessage ? (
+            <Text tone="success" variant="body">
+              {savedMessage}
+            </Text>
+          ) : null}
           <WorkoutLogForm
-            actualDistanceKm={log?.actualDistanceKm?.toFixed(2)}
-            actualDurationMin={log?.actualDurationMin?.toString()}
-            notes={log?.notes}
+            actualDistanceKm={actualDistanceKm}
+            actualDurationMin={actualDurationMin}
+            distanceError={errors.actualDistanceKm?.message}
+            durationError={errors.actualDurationMin?.message}
+            notes={notes}
+            notesError={errors.notes?.message}
+            onChangeActualDistanceKm={(value) => setValue("actualDistanceKm", value, { shouldValidate: true })}
+            onChangeActualDurationMin={(value) => setValue("actualDurationMin", value, { shouldValidate: true })}
+            onChangeNotes={(value) => setValue("notes", value, { shouldValidate: true })}
+            readOnly={workout.type === "rest"}
           />
         </View>
       </Card>

@@ -1,3 +1,4 @@
+import { Redirect } from "expo-router";
 import { View } from "react-native";
 
 import { SummaryStatCard } from "@/components/SummaryStatCard";
@@ -6,16 +7,35 @@ import { CompletionChart } from "@/components/charts/CompletionChart";
 import { WeeklyDistanceChart } from "@/components/charts/WeeklyDistanceChart";
 import { WeeklyTimeChart } from "@/components/charts/WeeklyTimeChart";
 import { Card } from "@/components/ui/Card";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { Screen } from "@/components/ui/Screen";
 import { Text } from "@/components/ui/Text";
+import { useAppSession } from "@/features/auth/hooks";
 
 import { useProgressScreenData } from "../hooks/useProgressScreenData";
 
 export function ProgressScreen() {
-  const { completionChartData, distanceChartData, summary, timeChartData } = useProgressScreenData();
+  const { hasActivePlan: sessionHasActivePlan, hydrated, isAuthenticated } = useAppSession();
+  const { completionChartData, distanceChartData, hasActivePlan, summary, timeChartData, weekNumber } = useProgressScreenData();
+
+  if (hydrated && !isAuthenticated) {
+    return <Redirect href="../(auth)/sign-in" />;
+  }
+
+  if (hydrated && !sessionHasActivePlan) {
+    return <Redirect href="../(onboarding)/select-challenge" />;
+  }
+
+  if (!hasActivePlan) {
+    return (
+      <Screen subtitle="No active plan" title="Progress">
+        <EmptyState description="Progress unlocks once your challenge and plan are active." title="Nothing to summarize yet" />
+      </Screen>
+    );
+  }
 
   return (
-    <Screen subtitle="Preview summary" title="Progress">
+    <Screen subtitle={weekNumber ? `Week ${weekNumber} summary` : "Progress summary"} title="Progress">
       <View style={{ flexDirection: "row", gap: 12 }}>
         <View style={{ flex: 1 }}>
           <SummaryStatCard label="Completed" value={`${summary.completedSessions}/${summary.totalSessions}`} />

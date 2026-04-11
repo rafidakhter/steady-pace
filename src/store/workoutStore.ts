@@ -17,6 +17,7 @@ interface WorkoutStoreState {
   getWorkoutLog: (workoutId: string) => WorkoutLog | null;
   logs: Record<string, WorkoutLog>;
   markComplete: (workoutId: string) => void;
+  resetAllLogs: () => void;
   resetWorkoutLog: (workoutId: string) => void;
   saveWorkoutLog: (input: SaveWorkoutLogInput) => WorkoutLog;
 }
@@ -44,6 +45,11 @@ export const useWorkoutStore = create<WorkoutStoreState>()(
             }
           }
         }));
+      },
+      resetAllLogs: () => {
+        set({
+          logs: {}
+        });
       },
       resetWorkoutLog: (workoutId) => {
         set((state) => {

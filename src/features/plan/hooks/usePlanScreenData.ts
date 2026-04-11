@@ -1,17 +1,19 @@
-import { getPreviewTrainingState } from "@/core/utils/trainingPreview";
+import { useCurrentPlanState } from "./useCurrentPlanState";
 
 export function usePlanScreenData() {
-  const preview = getPreviewTrainingState();
-  const completedWorkoutIds = Object.values(preview.logs)
+  const currentPlanState = useCurrentPlanState();
+  const completedWorkoutIds = Object.values(currentPlanState.logs)
     .filter((log) => log.completed)
     .map((log) => log.workoutId);
+  const activeWeek = currentPlanState.currentWeekNumber ? currentPlanState.plan?.weeks[currentPlanState.currentWeekNumber - 1] : null;
 
   return {
     completedWorkoutIds,
-    milestone: preview.plan.weeks[preview.currentWeekNumber - 1]?.milestone ?? null,
-    planName: preview.plan.name,
-    weekGoal: preview.plan.weeks[preview.currentWeekNumber - 1]?.goal ?? null,
-    weekNumber: preview.currentWeekNumber,
-    workouts: preview.weekWorkouts
+    hasActivePlan: Boolean(currentPlanState.plan && currentPlanState.planStartDate),
+    milestone: activeWeek?.milestone ?? null,
+    planName: currentPlanState.plan?.name ?? "No plan selected",
+    weekGoal: activeWeek?.goal ?? null,
+    weekNumber: currentPlanState.currentWeekNumber,
+    workouts: currentPlanState.weekWorkouts
   };
 }
