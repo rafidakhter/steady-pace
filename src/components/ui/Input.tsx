@@ -7,9 +7,10 @@ import { Text } from "./Text";
 interface InputProps extends TextInputProps {
   error?: string;
   label: string;
+  multiline?: boolean;
 }
 
-export function Input({ error, label, ...props }: InputProps) {
+export function Input({ error, label, multiline, ...props }: InputProps) {
   return (
     <View style={{ gap: 6 }}>
       <Text tone="muted" variant="label">
@@ -24,10 +25,12 @@ export function Input({ error, label, ...props }: InputProps) {
           color: theme.colors.text,
           fontFamily: theme.typography.fontFamily.bodyRegular,
           fontSize: theme.typography.size.body,
-          minHeight: 48,
+          minHeight: multiline ? 112 : 48,
           paddingHorizontal: 0,
-          paddingVertical: 12
+          paddingVertical: 12,
+          textAlignVertical: multiline ? "top" : "center"
         }}
+        multiline={multiline}
         {...props}
       />
       {error ? (
