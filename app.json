@@ -4,6 +4,14 @@
     "slug": "steady-pace",
     "version": "1.0.0",
     "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "scheme": "steady-pace",
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
     "assetBundlePatterns": [
       "**/*"
     ]
