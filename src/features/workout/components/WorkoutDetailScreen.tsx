@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Redirect, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { View } from "react-native";
@@ -13,8 +13,8 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { Screen } from "@/components/ui/Screen";
 import { Text } from "@/components/ui/Text";
-import { useAppSession } from "@/features/auth/hooks";
 import { useWorkoutStore } from "@/store/workoutStore";
+import { AppGate } from "@/features/auth/components";
 
 import { useWorkoutDetailScreenData } from "../hooks/useWorkoutDetailScreenData";
 import { WorkoutLogFormValues, workoutLogSchema } from "../validators";
@@ -25,7 +25,6 @@ interface WorkoutDetailScreenProps {
 
 export function WorkoutDetailScreen({ workoutId }: WorkoutDetailScreenProps) {
   const router = useRouter();
-  const { hasActivePlan: sessionHasActivePlan, hydrated, isAuthenticated } = useAppSession();
   const saveWorkoutLog = useWorkoutStore((state) => state.saveWorkoutLog);
   const markComplete = useWorkoutStore((state) => state.markComplete);
   const { completion, hasActivePlan, log, workout } = useWorkoutDetailScreenData(workoutId);
@@ -56,37 +55,33 @@ export function WorkoutDetailScreen({ workoutId }: WorkoutDetailScreenProps) {
     reset(defaultValues);
   }, [defaultValues, reset]);
 
-  if (hydrated && !isAuthenticated) {
-    return <Redirect href="../(auth)/sign-in" />;
-  }
-
-  if (hydrated && !sessionHasActivePlan) {
-    return <Redirect href="../(onboarding)/select-challenge" />;
-  }
-
   if (!hasActivePlan) {
     return (
-      <Screen subtitle="Workout" title="Workout detail">
-        <EmptyState
-          actionLabel="Choose challenge"
-          description="You need an active challenge before workouts can be opened."
-          onActionPress={() => router.push("../(onboarding)/select-challenge")}
-          title="No active plan"
-        />
-      </Screen>
+      <AppGate requirePlan>
+        <Screen subtitle="Workout" title="Workout detail">
+          <EmptyState
+            actionLabel="Choose challenge"
+            description="You need an active challenge before workouts can be opened."
+            onActionPress={() => router.push("../(onboarding)/select-challenge")}
+            title="No active plan"
+          />
+        </Screen>
+      </AppGate>
     );
   }
 
   if (!workout) {
     return (
-      <Screen subtitle="Workout" title="Workout detail">
-        <EmptyState
-          actionLabel="Back to plan"
-          description="We could not find that workout in the preview plan."
-          onActionPress={() => router.push("../(tabs)/plan")}
-          title="Workout not found"
-        />
-      </Screen>
+      <AppGate requirePlan>
+        <Screen subtitle="Workout" title="Workout detail">
+          <EmptyState
+            actionLabel="Back to plan"
+            description="We could not find that workout in the current plan."
+            onActionPress={() => router.push("../(tabs)/plan")}
+            title="Workout not found"
+          />
+        </Screen>
+      </AppGate>
     );
   }
 
@@ -108,58 +103,60 @@ export function WorkoutDetailScreen({ workoutId }: WorkoutDetailScreenProps) {
   });
 
   return (
-    <Screen
-      footer={<Button label={workout.type === "rest" ? "Mark rest day complete" : "Save workout"} loading={isSubmitting} onPress={onSubmit} />}
-      subtitle={`Week ${workout.weekNumber} • ${workout.dayKey}`}
-      title={workout.title}
-    >
-      <Card>
-        <View style={{ gap: 12 }}>
-          <View style={{ alignItems: "center", flexDirection: "row", justifyContent: "space-between" }}>
-            <Text tone="muted" variant="label">
-              Session overview
+    <AppGate requirePlan>
+      <Screen
+        footer={<Button label={workout.type === "rest" ? "Mark rest day complete" : "Save workout"} loading={isSubmitting} onPress={onSubmit} />}
+        subtitle={`Week ${workout.weekNumber} • ${workout.dayKey}`}
+        title={workout.title}
+      >
+        <Card>
+          <View style={{ gap: 12 }}>
+            <View style={{ alignItems: "center", flexDirection: "row", justifyContent: "space-between" }}>
+              <Text tone="muted" variant="label">
+                Session overview
+              </Text>
+              <CompletionBadge completed={log?.completed} isRestDay={workout.type === "rest"} />
+            </View>
+            <WorkoutMetaRow workout={workout} />
+            <Text tone="muted" variant="body">
+              {workout.description}
             </Text>
-            <CompletionBadge completed={log?.completed} isRestDay={workout.type === "rest"} />
+            {workout.notes ? (
+              <Text variant="caption">{workout.notes}</Text>
+            ) : null}
           </View>
-          <WorkoutMetaRow workout={workout} />
-          <Text tone="muted" variant="body">
-            {workout.description}
-          </Text>
-          {workout.notes ? (
-            <Text variant="caption">{workout.notes}</Text>
-          ) : null}
-        </View>
-      </Card>
+        </Card>
 
-      <Card>
-        <View style={{ gap: 12 }}>
-          <Text variant="title">Completion</Text>
-          <ProgressBar currentLabel={`${completion}%`} label="Workout progress" progress={completion} targetLabel="100%" />
-        </View>
-      </Card>
+        <Card>
+          <View style={{ gap: 12 }}>
+            <Text variant="title">Completion</Text>
+            <ProgressBar currentLabel={`${completion}%`} label="Workout progress" progress={completion} targetLabel="100%" />
+          </View>
+        </Card>
 
-      <Card>
-        <View style={{ gap: 12 }}>
-          <Text variant="title">Workout log</Text>
-          {savedMessage ? (
-            <Text tone="success" variant="body">
-              {savedMessage}
-            </Text>
-          ) : null}
-          <WorkoutLogForm
-            actualDistanceKm={actualDistanceKm}
-            actualDurationMin={actualDurationMin}
-            distanceError={errors.actualDistanceKm?.message}
-            durationError={errors.actualDurationMin?.message}
-            notes={notes}
-            notesError={errors.notes?.message}
-            onChangeActualDistanceKm={(value) => setValue("actualDistanceKm", value, { shouldValidate: true })}
-            onChangeActualDurationMin={(value) => setValue("actualDurationMin", value, { shouldValidate: true })}
-            onChangeNotes={(value) => setValue("notes", value, { shouldValidate: true })}
-            readOnly={workout.type === "rest"}
-          />
-        </View>
-      </Card>
-    </Screen>
+        <Card>
+          <View style={{ gap: 12 }}>
+            <Text variant="title">Workout log</Text>
+            {savedMessage ? (
+              <Text tone="success" variant="body">
+                {savedMessage}
+              </Text>
+            ) : null}
+            <WorkoutLogForm
+              actualDistanceKm={actualDistanceKm}
+              actualDurationMin={actualDurationMin}
+              distanceError={errors.actualDistanceKm?.message}
+              durationError={errors.actualDurationMin?.message}
+              notes={notes}
+              notesError={errors.notes?.message}
+              onChangeActualDistanceKm={(value) => setValue("actualDistanceKm", value, { shouldValidate: true })}
+              onChangeActualDurationMin={(value) => setValue("actualDurationMin", value, { shouldValidate: true })}
+              onChangeNotes={(value) => setValue("notes", value, { shouldValidate: true })}
+              readOnly={workout.type === "rest"}
+            />
+          </View>
+        </Card>
+      </Screen>
+    </AppGate>
   );
 }

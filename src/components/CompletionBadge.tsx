@@ -7,7 +7,7 @@ interface CompletionBadgeProps {
 
 export function CompletionBadge({ completed, isRestDay }: CompletionBadgeProps) {
   if (isRestDay) {
-    return <Chip label="Rest" />;
+    return <Chip label="Rest day" tone="subtle" />;
   }
 
   if (completed) {

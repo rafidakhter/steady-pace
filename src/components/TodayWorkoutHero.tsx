@@ -9,12 +9,13 @@ import { Text } from "./ui/Text";
 import { WorkoutMetaRow } from "./WorkoutMetaRow";
 
 interface TodayWorkoutHeroProps {
+  completed?: boolean;
   dateLabel: string;
   onPress?: () => void;
   workout: Workout | null;
 }
 
-export function TodayWorkoutHero({ dateLabel, onPress, workout }: TodayWorkoutHeroProps) {
+export function TodayWorkoutHero({ completed, dateLabel, onPress, workout }: TodayWorkoutHeroProps) {
   if (!workout) {
     return <EmptyState description="Once a challenge is active, today’s workout will appear here." title="No workout yet" />;
   }
@@ -30,6 +31,7 @@ export function TodayWorkoutHero({ dateLabel, onPress, workout }: TodayWorkoutHe
           <Text tone="muted" variant="body">
             Take the day fully off and recover for the next session.
           </Text>
+          <Text variant="caption">Recovery is part of the plan, not a missed workout.</Text>
           <Button label="View week" onPress={onPress} variant="outline" />
         </View>
       </Card>
@@ -42,9 +44,13 @@ export function TodayWorkoutHero({ dateLabel, onPress, workout }: TodayWorkoutHe
         <Text tone="muted" variant="label">
           {dateLabel}
         </Text>
+        {completed ? <Text tone="success" variant="label">Completed</Text> : null}
         <Text variant="display">{workout.title}</Text>
         <WorkoutMetaRow workout={workout} />
-        <Button label="View workout" onPress={onPress} variant="outline" />
+        <Text tone="muted" variant="body">
+          {completed ? "Your actuals are saved. You can reopen the workout to review or update them." : workout.description}
+        </Text>
+        <Button label={completed ? "Review workout" : "View workout"} onPress={onPress} variant="outline" />
       </View>
     </Card>
   );
