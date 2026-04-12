@@ -17,6 +17,7 @@ export function Button({ disabled, label, loading, onPress, style, variant = "pr
   const isPrimary = variant === "primary";
   const isGhost = variant === "ghost";
   const isDisabled = disabled || loading;
+  const textColor = isPrimary ? "#FFFFFF" : theme.colors.text;
 
   return (
     <Pressable
@@ -38,8 +39,8 @@ export function Button({ disabled, label, loading, onPress, style, variant = "pr
         style
       ]}
     >
-      {loading ? <ActivityIndicator color={theme.colors.text} size="small" /> : null}
-      <Text style={{ textAlign: "center" }} variant="label">
+      {loading ? <ActivityIndicator color={textColor} size="small" /> : null}
+      <Text style={{ color: textColor, textAlign: "center" }} variant="label">
         {label}
       </Text>
     </Pressable>

@@ -12,6 +12,7 @@ export function usePlanScreenData() {
     hasActivePlan: Boolean(currentPlanState.plan && currentPlanState.planStartDate),
     milestone: activeWeek?.milestone ?? null,
     planName: currentPlanState.plan?.name ?? "No plan selected",
+    planStartDate: currentPlanState.planStartDate,
     weekGoal: activeWeek?.goal ?? null,
     weekNumber: currentPlanState.currentWeekNumber,
     workouts: currentPlanState.weekWorkouts

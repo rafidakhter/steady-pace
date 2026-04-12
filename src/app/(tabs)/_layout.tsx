@@ -1,27 +1,30 @@
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 
-import { theme } from "@/core/theme";
+import { BottomNav } from "@/components/ui/BottomNav";
+import { TabRoute } from "@/types/navigation";
+
+const tabPaths: Record<TabRoute, "/home" | "/plan" | "/progress" | "/profile"> = {
+  home: "/home",
+  plan: "/plan",
+  progress: "/progress",
+  profile: "/profile"
+};
 
 export default function TabsLayout() {
+  const router = useRouter();
+
   return (
     <Tabs
+      tabBar={({ state }) => (
+        <BottomNav
+          activeTab={state.routeNames[state.index] as TabRoute}
+          onSelect={(tab) => router.navigate(tabPaths[tab])}
+        />
+      )}
       screenOptions={{
         headerShown: false,
         sceneStyle: {
-          backgroundColor: theme.colors.background
-        },
-        tabBarActiveTintColor: theme.colors.text,
-        tabBarInactiveTintColor: theme.colors.muted,
-        tabBarLabelStyle: {
-          fontFamily: theme.typography.fontFamily.headingMedium,
-          fontSize: 11,
-          letterSpacing: 0.8,
-          textTransform: "uppercase"
-        },
-        tabBarStyle: {
-          backgroundColor: theme.colors.background,
-          borderTopColor: theme.colors.accent,
-          height: 64
+          backgroundColor: "#FFFFFF"
         }
       }}
     >

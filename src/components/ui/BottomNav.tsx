@@ -1,4 +1,5 @@
 import { Pressable, View } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 
 import { theme } from "@/core/theme";
 import { TabRoute } from "@/types/navigation";
@@ -6,6 +7,7 @@ import { TabRoute } from "@/types/navigation";
 import { Text } from "./Text";
 
 interface BottomNavItem {
+  icon: keyof typeof MaterialIcons.glyphMap;
   key: TabRoute;
   label: string;
 }
@@ -17,10 +19,10 @@ interface BottomNavProps {
 }
 
 const defaultItems: BottomNavItem[] = [
-  { key: "home", label: "Home" },
-  { key: "plan", label: "Plan" },
-  { key: "progress", label: "Progress" },
-  { key: "profile", label: "Profile" }
+  { icon: "home-filled", key: "home", label: "HOME" },
+  { icon: "calendar-today", key: "plan", label: "PLAN" },
+  { icon: "bar-chart", key: "progress", label: "PROGRESS" },
+  { icon: "person-outline", key: "profile", label: "PROFILE" }
 ];
 
 export function BottomNav({ activeTab, items = defaultItems, onSelect }: BottomNavProps) {
@@ -44,14 +46,24 @@ export function BottomNav({ activeTab, items = defaultItems, onSelect }: BottomN
             onPress={() => onSelect?.(item.key)}
             style={{
               alignItems: "center",
-              borderTopColor: isActive ? theme.colors.text : "transparent",
-              borderTopWidth: 2,
               flex: 1,
-              gap: 4,
-              paddingTop: 8
+              gap: 2,
+              justifyContent: "center",
+              minHeight: 54
             }}
           >
-            <Text tone={isActive ? "default" : "muted"} variant="label">
+            <MaterialIcons color={isActive ? theme.colors.text : theme.colors.muted} name={item.icon} size={22} />
+            <Text
+              style={{
+                borderBottomColor: isActive ? theme.colors.text : "transparent",
+                borderBottomWidth: isActive ? 2 : 0,
+                fontFamily: isActive ? theme.typography.fontFamily.headingSemibold : theme.typography.fontFamily.headingMedium,
+                letterSpacing: 0.2,
+                paddingBottom: isActive ? 2 : 0
+              }}
+              tone={isActive ? "default" : "muted"}
+              variant="caption"
+            >
               {item.label}
             </Text>
           </Pressable>

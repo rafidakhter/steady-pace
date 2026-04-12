@@ -4,8 +4,6 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { View } from "react-native";
 
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Text } from "@/components/ui/Text";
 import { useAppStore } from "@/store/appStore";
@@ -51,62 +49,56 @@ export function SignInScreen() {
 
   return (
     <AuthScreenShell
-      alternateCtaHref="./sign-up"
-      alternateCtaLabel="Create account"
-      eyebrow="Sign in"
-      footer={<Button label="Continue" loading={isSubmitting} onPress={onSubmit} />}
-      title="Welcome back"
+      ctaLabel={isSubmitting ? "Signing in..." : "Sign In"}
+      ctaLoading={isSubmitting}
+      ctaOnPress={onSubmit}
+      mode="signIn"
+      title="Steady Pace"
     >
-      <Card>
-        <View style={{ gap: 16 }}>
-          {submitError ? (
-            <Text tone="danger" variant="body">
-              {submitError}
-            </Text>
-          ) : null}
-          <Controller
-            control={control}
-            name="email"
-            render={({ field: { onBlur, onChange, value } }) => (
-              <Input
-                autoCapitalize="none"
-                autoCorrect={false}
-                error={errors.email?.message}
-                keyboardType="email-address"
-                label="Email"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                placeholder="you@example.com"
-                value={value}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="password"
-            render={({ field: { onBlur, onChange, value } }) => (
-              <Input
-                error={errors.password?.message}
-                label="Password"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                placeholder="At least 6 characters"
-                secureTextEntry
-                value={value}
-              />
-            )}
-          />
-        </View>
-      </Card>
-
-      <Card>
-        <View style={{ gap: 8 }}>
-          <Text variant="label">V1 auth</Text>
+      <View style={{ gap: 24 }}>
+        {submitError ? (
+          <Text tone="danger" variant="body">
+            {submitError}
+          </Text>
+        ) : null}
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onBlur, onChange, value } }) => (
+            <Input
+              autoCapitalize="none"
+              autoCorrect={false}
+              error={errors.email?.message}
+              keyboardType="email-address"
+              label="Email"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              placeholder="email@example.com"
+              value={value}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onBlur, onChange, value } }) => (
+            <Input
+              error={errors.password?.message}
+              label="Password"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              placeholder="••••••••"
+              secureTextEntry
+              value={value}
+            />
+          )}
+        />
+        <View style={{ paddingTop: 4 }}>
           <Text tone="muted" variant="body">
             This flow uses local validation and persisted mock auth for V1.
           </Text>
         </View>
-      </Card>
+      </View>
     </AuthScreenShell>
   );
 }
