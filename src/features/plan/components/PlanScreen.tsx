@@ -1,4 +1,4 @@
-import { Pressable, View } from "react-native";
+import { Pressable, ScrollView, View } from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -35,7 +35,11 @@ export function PlanScreen() {
           ) : null}
         </View>
 
-        <View style={{ flex: 1 }}>
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: theme.spacing.xl }}
+          showsVerticalScrollIndicator={false}
+          style={{ flex: 1 }}
+        >
           {workouts.map((workout, index) => {
             const completed = completedWorkoutIds.includes(workout.id);
             const isRest = workout.type === "rest";
@@ -93,7 +97,7 @@ export function PlanScreen() {
               </Pressable>
             );
           })}
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </AppGate>
   );
