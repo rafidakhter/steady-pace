@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kinetic Mono | Challenge Selection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#111111",
+                        "on-primary-fixed": "#111111",
+                        "on-surface": "#111111",
+                        "surface-container-highest": "#888888",
+                        "on-error": "#ffffff",
+                        "background": "#ffffff",
+                        "tertiary-container": "#e2e2e2",
+                        "secondary-container": "#f7f7f7",
+                        "on-tertiary-fixed-variant": "#111111",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#111111",
+                        "surface-container-high": "#e2e2e2",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#888888",
+                        "surface-bright": "#ffffff",
+                        "inverse-surface": "#142111",
+                        "on-secondary-fixed-variant": "#ffffff",
+                        "on-primary-fixed-variant": "#111111",
+                        "on-surface-variant": "#888888",
+                        "surface-variant": "#f7f7f7",
+                        "on-secondary-fixed": "#ffffff",
+                        "outline": "#e2e2e2",
+                        "on-primary-container": "#111111",
+                        "on-error-container": "#93000a",
+                        "tertiary": "#888888",
+                        "secondary-fixed-dim": "#111111",
+                        "surface-tint": "#5ce33b",
+                        "inverse-primary": "#5ce33b",
+                        "surface-dim": "#f6f8f6",
+                        "surface-container": "#f7f7f7",
+                        "primary-container": "#5ce33b",
+                        "primary": "#5ce33b",
+                        "on-secondary-container": "#111111",
+                        "surface-container-low": "#f6f8f6",
+                        "primary-fixed": "#5ce33b",
+                        "secondary": "#111111",
+                        "error": "#ba1a1a",
+                        "surface": "#ffffff",
+                        "primary-fixed-dim": "#5ce33b",
+                        "on-primary": "#111111",
+                        "on-background": "#111111",
+                        "inverse-on-surface": "#f6f8f6",
+                        "tertiary-fixed": "#e2e2e2",
+                        "tertiary-fixed-dim": "#888888",
+                        "secondary-fixed": "#111111",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Space Grotesk"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #111111;
+        }
+        .font-grotesk {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b-2 border-zinc-100 flex items-center justify-between px-6 h-16">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer active:scale-95 transition-transform" data-icon="menu">menu</span>
+<span class="text-xl font-bold tracking-tighter text-black uppercase font-grotesk">KINETIC MONO</span>
+</div>
+<div class="w-8 h-8 bg-zinc-200 flex items-center justify-center cursor-pointer active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-xs" data-icon="person">person</span>
+</div>
+</nav>
+<main class="pt-24 pb-32 px-6 max-w-2xl mx-auto">
+<!-- Header Section -->
+<header class="mb-12">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-2 h-8 bg-primary"></div>
+<span class="font-grotesk font-bold uppercase tracking-widest text-xs text-on-surface-variant">STAGE 01</span>
+</div>
+<h1 class="text-4xl md:text-5xl font-grotesk font-semibold tracking-tight leading-none mb-4 uppercase">CHOOSE YOUR CHALLENGE</h1>
+<p class="text-on-surface-variant font-body leading-relaxed max-w-md">Select your baseline. Our lab will generate a technical progression path based on your choice.</p>
+</header>
+<!-- Challenge Selection Grid -->
+<div class="flex flex-col space-y-6">
+<!-- Challenge 01: 5K RUN -->
+<div class="group relative cursor-pointer active:scale-[0.98] transition-all">
+<div class="bg-surface-container p-6 flex flex-col md:flex-row md:items-end justify-between gap-4 border-l-4 border-transparent hover:border-zinc-300 transition-colors">
+<div class="flex-1">
+<span class="font-grotesk font-bold uppercase tracking-[0.2em] text-[10px] text-primary mb-2 block">ENTRY LEVEL</span>
+<h2 class="text-3xl font-grotesk font-bold tracking-tighter uppercase mb-1">5K RUN</h2>
+<p class="font-body text-sm text-on-surface-variant max-w-xs">Perfect for first-timers starting their endurance journey.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<span class="block font-grotesk font-bold text-xs uppercase tracking-widest">EST. TIME</span>
+<span class="block font-grotesk text-xl font-medium tracking-tight">25-35 MIN</span>
+</div>
+<span class="material-symbols-outlined text-zinc-300" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Challenge 02: 10K RUN (Active State Mockup) -->
+<div class="relative cursor-pointer transition-all">
+<div class="bg-primary p-6 flex flex-col md:flex-row md:items-end justify-between gap-4 border-l-4 border-black">
+<div class="flex-1">
+<span class="font-grotesk font-bold uppercase tracking-[0.2em] text-[10px] text-black mb-2 block">INTERMEDIATE</span>
+<h2 class="text-3xl font-grotesk font-bold tracking-tighter uppercase mb-1">10K RUN</h2>
+<p class="font-body text-sm text-black/80 max-w-xs">The next step up. For athletes who have built a solid aerobic base.</p>
+</div>
+<div class="flex items-center gap-3 text-black">
+<div class="text-right">
+<span class="block font-grotesk font-bold text-xs uppercase tracking-widest">EST. TIME</span>
+<span class="block font-grotesk text-xl font-medium tracking-tight">50-65 MIN</span>
+</div>
+<span class="material-symbols-outlined font-bold" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<!-- Selection Overlay/Marker -->
+<div class="absolute -top-3 -right-3 bg-black text-white px-3 py-1 font-grotesk font-bold text-[10px] uppercase tracking-widest">SELECTED</div>
+</div>
+<!-- Challenge 03: SPRINT TRIATHLON -->
+<div class="group relative cursor-pointer active:scale-[0.98] transition-all">
+<div class="bg-surface-container p-6 flex flex-col md:flex-row md:items-end justify-between gap-4 border-l-4 border-transparent hover:border-zinc-300 transition-colors">
+<div class="flex-1">
+<span class="font-grotesk font-bold uppercase tracking-[0.2em] text-[10px] text-on-surface-variant mb-2 block">MULTISPORT</span>
+<h2 class="text-3xl font-grotesk font-bold tracking-tighter uppercase mb-1">SPRINT TRIATHLON</h2>
+<p class="font-body text-sm text-on-surface-variant max-w-xs">Swim, Bike, Run. A complete test of versatile performance.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<span class="block font-grotesk font-bold text-xs uppercase tracking-widest">EST. TIME</span>
+<span class="block font-grotesk text-xl font-medium tracking-tight">1.5 - 2.5 HR</span>
+</div>
+<span class="material-symbols-outlined text-zinc-300" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Asymmetric Detail Card -->
+</main>
+<!-- Sticky Footer CTA -->
+<div class="fixed bottom-20 left-0 w-full h-24 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none z-40"></div>
+<div class="fixed bottom-0 left-0 w-full bg-white px-6 py-4 border-t-2 border-zinc-100 z-50 md:flex md:justify-center">
+<button class="w-full md:w-max md:px-24 bg-primary text-black font-grotesk font-bold uppercase tracking-[0.2em] py-5 active:translate-y-0.5 transition-all shadow-sm">
+            CONFIRM CHALLENGE
+        </button>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-20 px-4 pb-safe bg-white border-t-2 border-zinc-100 z-[60] md:hidden">
+<div class="flex flex-col items-center justify-center text-zinc-400 pt-2">
+<span class="material-symbols-outlined" data-icon="fitness_center">fitness_center</span>
+<span class="font-grotesk font-bold uppercase tracking-widest text-[10px] mt-1">TRAIN</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary border-t-2 border-primary -mt-[2px] pt-2">
+<span class="material-symbols-outlined" data-icon="ads_click" style="font-variation-settings: 'FILL' 1;">ads_click</span>
+<span class="font-grotesk font-bold uppercase tracking-widest text-[10px] mt-1">CHALLENGE</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-400 pt-2">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="font-grotesk font-bold uppercase tracking-widest text-[10px] mt-1">STATS</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-400 pt-2">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-grotesk font-bold uppercase tracking-widest text-[10px] mt-1">PROFILE</span>
+</div>
+</nav>
+</body></html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Workout Detail - Steady Pace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Satoshi:wght@400;500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#5ce33b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#142111",
+                        "surface": "#F7F7F7",
+                        "text-main": "#111111",
+                        "text-muted": "#888888",
+                        "accent": "#E2E2E2"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Satoshi", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Satoshi', sans-serif; }
+        h1, h2, h3, h4, h5, h6, .font-display { font-family: 'Space Grotesk', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-white text-text-main antialiased selection:bg-primary selection:text-white min-h-screen flex flex-col relative">
+<!-- Minimal Back Header (Exception for Focused Views) -->
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-accent px-6 py-4 flex items-center justify-between">
+<a aria-label="Go back" class="text-text-main hover:text-text-muted transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="arrow_back">arrow_back</span>
+</a>
+<div class="text-xs font-medium tracking-widest text-text-muted uppercase">Today's Session</div>
+<div class="w-6"></div> <!-- Spacer for centering -->
+</header>
+<!-- Workout Context -->
+<section class="px-6 py-8">
+<h1 class="font-display text-[32px] font-semibold leading-tight mb-2">Base Run</h1>
+<div class="flex items-center gap-2 text-sm text-text-muted uppercase tracking-wider font-medium">
+<span>45 MIN</span>
+<span>/</span>
+<span>ZONE 2</span>
+<span>/</span>
+<span>5KM</span>
+</div>
+</section>
+<!-- Interval Blocks -->
+<main class="flex-1 px-6 pb-32 space-y-6">
+<!-- Warmup Block -->
+<div class="bg-surface p-5 rounded">
+<h2 class="font-display text-sm font-semibold uppercase tracking-wider mb-3 text-text-muted">Warmup</h2>
+<p class="text-base leading-relaxed">
+                10:00 - Easy Jog, RPE 3
+            </p>
+<p class="text-sm text-text-muted mt-2 leading-relaxed">
+                Focus on high cadence and light footfalls. Breathe comfortably through your nose if possible.
+            </p>
+</div>
+<!-- Main Set Block -->
+<div class="bg-white pl-4 border-l-2 border-text-main py-2 my-8 rounded-r">
+<h2 class="font-display text-sm font-semibold uppercase tracking-wider mb-3 text-text-muted">Main Set</h2>
+<div class="space-y-4 text-lg leading-relaxed font-medium">
+<p>5 x 3:00 at Race Pace</p>
+<p class="text-text-muted text-base">1:00 Walk Recovery between intervals</p>
+</div>
+<p class="text-sm text-text-muted mt-4 leading-relaxed max-w-[90%]">
+                Maintain a consistent pace across all 5 intervals. RPE should be around 6-7 during the work periods.
+            </p>
+</div>
+<!-- Cooldown Block -->
+<div class="bg-surface p-5 rounded">
+<h2 class="font-display text-sm font-semibold uppercase tracking-wider mb-3 text-text-muted">Cooldown</h2>
+<p class="text-base leading-relaxed">
+                5:00 - Walk
+            </p>
+<p class="text-sm text-text-muted mt-2 leading-relaxed">
+                Allow heart rate to drop completely. Shake out arms and legs.
+            </p>
+</div>
+</main>
+<!-- Sticky Bottom CTA -->
+<div class="fixed bottom-0 left-0 w-full p-6 bg-gradient-to-t from-white via-white to-transparent z-40">
+<button class="w-full bg-primary text-text-main font-display font-medium text-sm tracking-widest uppercase py-4 rounded active:scale-[0.98] transition-transform duration-150 ease-out shadow-sm flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="check">check</span>
+            Mark Completed
+        </button>
+</div>
+</body></html>

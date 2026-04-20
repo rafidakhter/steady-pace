@@ -1,0 +1,219 @@
+# Minimalist Monochrome
+
+## Product Overview
+
+**The Pitch:** Steady Pace removes the overwhelming telemetry from triathlon training. A structured, quiet, text-forward guide for beginners preparing for their first sprint or Olympic distance race.
+
+**For:** First-time triathletes who are intimidated by complex metrics and just need to know what to do today. 
+
+**Device:** mobile
+
+**Design Direction:** Stark, structural, and quiet. Built on high-contrast black and white typography with generous whitespace, using a single desaturated sage green for critical path actions.
+
+**Inspired by:** The minimalist utility of the Oura app, the editorial starkness of VSCO.
+
+---
+
+## Screens
+
+- **Login:** Clean entry point prioritizing email authentication.
+- **Home Dashboard:** Today's singular focus—what workout is scheduled right now.
+- **Weekly Plan:** Text-heavy, grid-based itinerary of the week's swims, bikes, and runs.
+- **Workout Detail:** Step-by-step text instructions for the day's session.
+- **Progress Summary:** Brutalist charts showing completed hours versus planned hours.
+
+---
+
+## Key Flows
+
+**Completing a Workout:** Moving from intent to completion.
+
+1. User is on Home Dashboard -> sees today's scheduled 45-minute base run.
+2. User clicks "Start Session" -> Workout Detail opens with interval breakdowns.
+3. User clicks "Mark Completed" at bottom -> returns to Home Dashboard; workout strikes through; sage green completion line fills.
+
+---
+
+<details>
+<summary>Design System</summary>
+
+## Color Palette
+
+- **Primary:** `#8A9A86` - Sage green. Buttons, active states, progress fills.
+- **Background:** `#FFFFFF` - Absolute white. Page backgrounds.
+- **Surface:** `#F7F7F7` - Cool gray. Secondary containers, input backgrounds.
+- **Text:** `#111111` - Near-black. Headings, body copy.
+- **Muted:** `#888888` - Mid-gray. Secondary text, inactive icons, subtle borders.
+- **Accent:** `#E2E2E2` - Light gray. Dividers, empty progress bars.
+
+## Typography
+
+- **Headings:** `Space Grotesk`, 600, 24-32px (Geometric, technical, structural)
+- **Body:** `Satoshi`, 400, 16px (Refined, neutral sans-serif)
+- **Small text:** `Satoshi`, 500, 12px (Uppercase tracking for metadata)
+- **Buttons:** `Space Grotesk`, 500, 14px (Uppercase, slight letter-spacing)
+
+**Style notes:** 0px border radius everywhere. Sharp corners. No drop shadows. Hierarchy is established entirely through typographic scale, weight, and 1px `#E2E2E2` borders.
+
+## Design Tokens
+
+```css
+:root {
+  --color-primary: #8A9A86;
+  --color-background: #FFFFFF;
+  --color-surface: #F7F7F7;
+  --color-text: #111111;
+  --color-muted: #888888;
+  --color-accent: #E2E2E2;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Satoshi', sans-serif;
+  --radius: 0px;
+  --spacing: 8px;
+}
+```
+
+</details>
+
+---
+
+<details>
+<summary>Screen Specifications</summary>
+
+### Login
+
+**Purpose:** Entry point and authentication.
+
+**Layout:** Vertically centered, generous top/bottom whitespace.
+
+**Key Elements:**
+- **Logo:** `STEADY PACE`, Space Grotesk, 700, 24px, `#111111`.
+- **Inputs:** Email and Password fields. `#F7F7F7` background, 1px `#E2E2E2` bottom border only.
+- **Primary CTA:** "SIGN IN", full-width, `#8A9A86` background, `#FFFFFF` text.
+
+**States:**
+- **Empty:** Placeholder text `#888888`.
+- **Loading:** "SIGNING IN...", 50% opacity CTA.
+- **Error:** 1px `#111111` border on input, 12px `#111111` text below field.
+
+**Components:**
+- **Input Field:** 48px height, 16px Satoshi text, zero padding left/right.
+
+**Interactions:**
+- **Click Input:** Bottom border transitions to `#111111`.
+
+**Responsive:**
+- **Mobile:** 24px side margins.
+
+### Home Dashboard
+
+**Purpose:** Singular focus on the immediate next workout.
+
+**Layout:** Massive typography at the top, single workout card taking up the middle, minimal bottom navigation.
+
+**Key Elements:**
+- **Date Header:** `TUESDAY, OCT 12`, 12px Satoshi, uppercase, 2px letter-spacing.
+- **Focus Title:** `Base Run`, 48px Space Grotesk, 600, `#111111`.
+- **Metadata Strip:** `45 MIN / ZONE 2 / 5KM`, 14px Satoshi, `#888888`, separated by `/`.
+- **Action Button:** "VIEW WORKOUT", outlined 1px `#111111`, `#111111` text.
+
+**States:**
+- **Empty (Rest Day):** "REST DAY", no metadata, button reads "VIEW WEEK".
+
+**Components:**
+- **Bottom Nav:** 64px height, 3 text-only tabs (HOME, PLAN, PROGRESS), 12px Space Grotesk. Active tab is `#111111`, inactive `#888888`.
+
+**Interactions:**
+- **Click Button:** Slide left transition to Workout Detail.
+
+**Responsive:**
+- **Mobile:** Full viewport height utilization, strict grid alignment.
+
+### Weekly Plan
+
+**Purpose:** Macro-view of the 7-day training structure.
+
+**Layout:** List-based, chronological from Monday to Sunday.
+
+**Key Elements:**
+- **Week Header:** `WEEK 4: ENDURANCE BUILD`, 24px Space Grotesk.
+- **Day Row:** Flex container, Date on left, Workout title on right.
+- **Discipline Indicator:** `SWIM`, `BIKE`, or `RUN` in 10px Space Grotesk, `#888888`.
+
+**States:**
+- **Completed Day:** Row text turns `#888888`, strikethrough applied to workout title.
+
+**Components:**
+- **Day Card:** 72px height, bottom border 1px `#E2E2E2`. Date block: `MON 12` stacked.
+
+**Interactions:**
+- **Click Row:** Opens Workout Detail for that specific day.
+
+**Responsive:**
+- **Mobile:** Single column list.
+
+### Workout Detail
+
+**Purpose:** The exact instructions for the training session.
+
+**Layout:** Sticky header with metadata, scrolling list of intervals.
+
+**Key Elements:**
+- **Header:** "Base Run", 32px Space Grotesk.
+- **Warmup Block:** "10:00 - Easy Jog, RPE 3", `#F7F7F7` background box, 16px padding.
+- **Main Set Block:** "5 x 3:00 at Race Pace / 1:00 Walk", stark white, left border 2px `#111111`.
+- **Cooldown Block:** "5:00 - Walk", `#F7F7F7` background box.
+- **Complete CTA:** Sticky bottom, "MARK COMPLETED", `#8A9A86` background.
+
+**States:**
+- **Loading:** Skeleton rectangles in `#F7F7F7`.
+
+**Components:**
+- **Interval Item:** 16px Satoshi, `1.5` line height.
+
+**Interactions:**
+- **Click Complete CTA:** Button text changes to "COMPLETED", scales down 0.98x briefly, routes back to Home.
+
+**Responsive:**
+- **Mobile:** Header sticks to top on scroll, button sticks to bottom.
+
+### Progress Summary
+
+**Purpose:** Objective tracking of time spent training.
+
+**Layout:** Top-heavy numbers, simple bar charts below.
+
+**Key Elements:**
+- **Big Stat:** `12.5 HRS`, 64px Space Grotesk, tracking actual training time.
+- **Subtext:** `OUT OF 14.0 HRS PLANNED`, 12px Satoshi, uppercase.
+- **Discipline Bars:** Three horizontal bars (Swim, Bike, Run). Background `#E2E2E2`, Fill `#111111`.
+- **Milestone Text:** "Next milestone: Longest run (8km) on Sunday", 16px Satoshi, italicized.
+
+**States:**
+- **Empty:** Bars at 0%, `0.0 HRS`.
+
+**Components:**
+- **Progress Bar:** 8px height, 0px radius. Fill width percentage driven by data.
+
+**Interactions:**
+- **Hover Bar:** (Desktop only - not applicable to mobile focus, but if tapped, shows exact minutes).
+
+**Responsive:**
+- **Mobile:** Bars span 100% of container width minus 48px margins.
+
+</details>
+
+---
+
+<details>
+<summary>Build Guide</summary>
+
+**Stack:** HTML + Tailwind CSS v3
+
+**Build Order:**
+1. **Home Dashboard** - Establishes the core typographic scale, layout margins (24px), and the stark black/white contrast.
+2. **Weekly Plan** - Introduces the 1px border list structures and the muted/completed text states.
+3. **Workout Detail** - Builds the surface containers (`#F7F7F7`) and the sticky primary action button (`#8A9A86`).
+4. **Progress Summary** - Implements the brutalist progress bars and massive typography.
+5. **Login** - Reuses the established input fields and primary CTA patterns.
+
+</details>

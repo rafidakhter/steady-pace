@@ -1,0 +1,909 @@
+STEADY PACE V1 — CODEX BUILD INSTRUCTIONS
+================================================
+
+Purpose
+-------
+This document is the single source of truth for Codex to build the V1 React Native app.
+Codex must follow the tasks in order, complete one micro task at a time, and keep the codebase scalable.
+
+How Codex should work
+---------------------
+1. Read this entire document before writing code.
+2. Follow phases in order.
+3. Inside each phase, complete micro tasks sequentially.
+4. Before any architecture or feature work, first create a basic Expo app that renders a simple "Hello World" screen and verify it runs successfully.
+5. Do not skip architecture setup to rush UI after the Hello World verification step.
+6. Keep business logic outside presentational components.
+7. Keep the app data-driven so new sports, workouts, and plans can be added later.
+8. Preserve clean structure and naming.
+9. After each major phase, do a quick refactor pass before moving on.
+10. If a task is unclear, infer the cleanest scalable solution rather than hardcoding.
+11. Prefer reusable abstractions over one-off screen logic.
+
+Project Summary
+---------------
+App name: Steady Pace
+
+Platform:
+- React Native
+- Expo
+- TypeScript
+- iPhone + Android
+
+V1 scope:
+- Auth screens
+- Challenge selection
+- Home dashboard
+- Weekly plan
+- Workout detail
+- Progress summary
+- Local persistence
+
+Pre-build verification requirement:
+- Before building the real app structure, first make the Expo app run with a minimal Hello World screen
+- Only proceed to the full architecture after confirming the base Expo app works
+
+Design goals:
+- Minimalist
+- Editorial typography
+- Mostly white and black
+- Muted gray surfaces
+- Green only for progress / active / success states
+- Sharp corners
+- Clean spacing
+- Very little visual clutter
+
+Scalability requirements:
+- App must not be tied only to triathlon
+- New sports must be easy to add later
+- New workout types must be easy to add later
+- New challenges and training plans must be easy to add later
+- Training logic must be reusable
+- Storage layer must be replaceable later
+
+IMPORTANT IMPLEMENTATION RULES
+------------------------------
+1. Do not hardcode swim, bike, run directly into screen logic.
+2. All sports must come from seed/config files.
+3. All workout types must come from config/constants.
+4. All plans must be data-driven.
+5. UI components must not contain business rules.
+6. Domain logic must live in services / utils / hooks / stores, not JSX.
+7. Persistence must be abstracted so AsyncStorage can be replaced later.
+8. Build a modular app that supports more phases and more sports later.
+9. Use TypeScript everywhere.
+10. Prefer composition over duplication.
+
+================================================
+SECTION A — ZIP / DESIGN REFERENCE
+================================================
+
+/design folder
+-----------------------------
+
+================================================
+SECTION B — TECH STACK
+================================================
+
+Codex must use this stack:
+
+Core:
+- Expo
+- React Native
+- TypeScript
+- Expo Router
+
+State / Forms / Validation:
+- Zustand
+- React Hook Form
+- Zod
+
+Persistence:
+- AsyncStorage
+
+Styling:
+- NativeWind
+
+Charts:
+- react-native-svg
+- victory-native
+
+Architecture:
+- feature-first + layered domain structure
+
+Future-ready:
+- code should be easy to connect later to Supabase or another backend
+
+================================================
+SECTION C - A — Create a barebone project before proceeding
+================================================
+
+create a hello world project to make sure expo is running properly before moving n to other sections
+
+================================================
+SECTION C- B — REQUIRED FOLDER STRUCTURE
+================================================
+
+Create this structure first before feature implementation:
+
+src/
+  app/
+    (auth)/
+      sign-in.tsx
+      sign-up.tsx
+    (onboarding)/
+      select-challenge.tsx
+    (tabs)/
+      home.tsx
+      plan.tsx
+      progress.tsx
+      profile.tsx
+    workout/
+      [workoutId].tsx
+    _layout.tsx
+
+  core/
+    constants/
+      colors.ts
+      spacing.ts
+      typography.ts
+      sports.ts
+      workoutTypes.ts
+    theme/
+      index.ts
+    utils/
+      date.ts
+      metrics.ts
+      progress.ts
+      format.ts
+
+  domain/
+    entities/
+      User.ts
+      Sport.ts
+      Challenge.ts
+      TrainingPlan.ts
+      TrainingWeek.ts
+      Workout.ts
+      WorkoutLog.ts
+      ProgressSummary.ts
+    value-objects/
+      Distance.ts
+      Duration.ts
+      WorkoutStatus.ts
+    services/
+      trainingPlanService.ts
+      workoutProgressService.ts
+      challengeSelectionService.ts
+
+  data/
+    seed/
+      sports.ts
+      challenges.ts
+      phase1TriathlonPlan.ts
+    repositories/
+      challengeRepository.ts
+      trainingPlanRepository.ts
+      workoutRepository.ts
+      progressRepository.ts
+    adapters/
+      localStorageAdapter.ts
+
+  features/
+    auth/
+      api/
+      hooks/
+      store/
+      components/
+      validators/
+    onboarding/
+      hooks/
+      components/
+    home/
+      hooks/
+      components/
+    plan/
+      hooks/
+      components/
+    workout/
+      hooks/
+      components/
+      validators/
+    progress/
+      hooks/
+      components/
+
+  components/
+    ui/
+      Button.tsx
+      Screen.tsx
+      Text.tsx
+      Input.tsx
+      Card.tsx
+      StatRow.tsx
+      ProgressBar.tsx
+      EmptyState.tsx
+      IconButton.tsx
+      BottomNav.tsx
+      Chip.tsx
+    charts/
+      WeeklyTimeChart.tsx
+      WeeklyDistanceChart.tsx
+      CompletionChart.tsx
+
+  store/
+    appStore.ts
+    planStore.ts
+    workoutStore.ts
+
+  types/
+    api.ts
+    navigation.ts
+    common.ts
+
+================================================
+SECTION D — DOMAIN MODEL
+================================================
+
+Codex must implement the app with generic domain models.
+
+Sport:
+- id: string
+- key: string
+- name: string
+- unitPreference: 'km' | 'min' | 'none'
+- colorToken: string
+- icon: string
+
+Workout:
+- id: string
+- weekNumber: number
+- dayKey: string
+- orderIndex: number
+- sportId: string
+- type: 'technique' | 'endurance' | 'interval' | 'brick' | 'strength' | 'mobility' | 'rest'
+- title: string
+- description: string
+- targetDistanceKm?: number
+- targetDurationMin?: number
+- targetZone?: string
+- notes?: string
+
+WorkoutLog:
+- id: string
+- workoutId: string
+- completed: boolean
+- actualDistanceKm?: number
+- actualDurationMin?: number
+- perceivedEffort?: number
+- notes?: string
+- completedAt?: string
+
+Challenge:
+- id: string
+- name: string
+- category: 'run' | 'triathlon' | 'bike' | 'custom'
+- level: 'beginner' | 'intermediate' | 'advanced'
+- estimatedDurationLabel: string
+- description: string
+- planId: string
+
+TrainingPlan:
+- id: string
+- challengeId: string
+- name: string
+- phase: string
+- weeks: TrainingWeek[]
+
+TrainingWeek:
+- weekNumber: number
+- goal?: string
+- milestone?: string
+- workouts: Workout[]
+
+ProgressSummary:
+- totalTargetTimeMin
+- totalActualTimeMin
+- totalTargetDistanceKm
+- totalActualDistanceKm
+- completionRate
+- completedSessions
+- totalSessions
+
+================================================
+SECTION E — SEED DATA REQUIREMENTS
+================================================
+
+Codex must create seed data files.
+
+Required:
+1. sports.ts
+2. challenges.ts
+3. phase1TriathlonPlan.ts
+
+Initial sports to seed:
+- swim
+- bike
+- run
+- strength
+- mobility
+- rest
+
+Initial challenges to seed:
+- 5K Run
+- 10K Run
+- Sprint Triathlon
+
+Only Sprint Triathlon must be fully implemented in V1.
+5K Run and 10K Run may be visible in UI as:
+- coming soon
+OR
+- placeholder plans
+
+================================================
+SECTION F — PHASE 1 TRIATHLON PLAN CONTENT
+================================================
+
+Codex must seed the following 8-week plan.
+
+Week 1
+- Monday: Swim — Technique swim + easy laps — 0.20 km — 25 min
+- Tuesday: Run — Run/walk intervals — 2.0 km — 20 min
+- Wednesday: Bike — Easy spin — 8 km — 30 min
+- Thursday: Mobility — Mobility + optional walk — 0 km — 20 min
+- Friday: Swim — Short swim endurance — 0.25 km — 25 min
+- Saturday: Bike — Long easy bike — 10 km — 40 min
+- Sunday: Rest — Full rest — 0 km — 0 min
+
+Week 2
+- Monday: Swim — Technique swim + easy laps — 0.25 km — 25 min
+- Tuesday: Run — Run/walk intervals — 2.25 km — 22 min
+- Wednesday: Bike — Easy spin — 9 km — 32 min
+- Thursday: Strength — Light strength + mobility — 0 km — 25 min
+- Friday: Swim — Continuous easy swim — 0.30 km — 28 min
+- Saturday: Bike — Long easy bike — 12 km — 45 min
+- Sunday: Rest — Full rest — 0 km — 0 min
+
+Week 3
+- Monday: Swim — Technique + pull buoy/drills — 0.30 km — 28 min
+- Tuesday: Run — Run/walk intervals — 2.50 km — 24 min
+- Wednesday: Bike — Easy spin — 10 km — 35 min
+- Thursday: Mobility — Mobility + optional walk — 0 km — 20 min
+- Friday: Swim — Short endurance swim — 0.35 km — 30 min
+- Saturday: Bike — Long easy bike — 14 km — 50 min
+- Sunday: Rest — Full rest — 0 km — 0 min
+
+Week 4
+- Monday: Swim — Technique swim — 0.35 km — 30 min
+- Tuesday: Run — Easy run/walk — 2.75 km — 25 min
+- Wednesday: Bike — Easy spin — 11 km — 36 min
+- Thursday: Strength — Light strength + mobility — 0 km — 25 min
+- Friday: Swim — Continuous easy swim — 0.40 km — 32 min
+- Saturday: Bike — Long easy bike — 15 km — 55 min
+- Sunday: Rest — Full rest — 0 km — 0 min
+
+Week 5
+- Monday: Swim — Technique + endurance — 0.40 km — 30 min
+- Tuesday: Run — Run/walk progression — 3.0 km — 28 min
+- Wednesday: Bike — Easy spin — 12 km — 38 min
+- Thursday: Brick — Short bike + short run — 6.0 km — 30 min
+- Friday: Swim — Continuous easy swim — 0.45 km — 32 min
+- Saturday: Bike — Long easy bike — 16 km — 60 min
+- Sunday: Rest — Full rest — 0 km — 0 min
+
+Week 6
+- Monday: Swim — Technique + endurance — 0.45 km — 32 min
+- Tuesday: Run — Easy run/walk — 3.25 km — 30 min
+- Wednesday: Bike — Easy spin — 13 km — 40 min
+- Thursday: Strength — Strength + mobility — 0 km — 25 min
+- Friday: Swim — Continuous easy swim — 0.50 km — 35 min
+- Saturday: Bike — Long easy bike — 18 km — 65 min
+- Sunday: Rest — Full rest — 0 km — 0 min
+
+Week 7
+- Monday: Swim — Technique + endurance — 0.50 km — 35 min
+- Tuesday: Run — Easy run/walk — 3.50 km — 32 min
+- Wednesday: Bike — Easy spin — 14 km — 42 min
+- Thursday: Brick — Short bike + short run — 7.0 km — 35 min
+- Friday: Swim — Continuous easy swim — 0.55 km — 36 min
+- Saturday: Bike — Long easy bike — 20 km — 70 min
+- Sunday: Rest — Full rest — 0 km — 0 min
+
+Week 8
+- Monday: Swim — Technique + endurance — 0.55 km — 35 min
+- Tuesday: Run — Easy run/walk — 4.0 km — 35 min
+- Wednesday: Bike — Easy spin — 15 km — 45 min
+- Thursday: Mobility — Mobility + optional walk — 0 km — 20 min
+- Friday: Swim — Continuous easy swim — 0.60 km — 38 min
+- Saturday: Bike — Long easy bike — 22 km — 75 min
+- Sunday: Rest — Full rest — 0 km — 0 min
+
+================================================
+SECTION G — THEME / DESIGN TOKENS
+================================================
+
+Use theme tokens close to this:
+
+colors:
+- primary: #8A9A86
+- highVisGreen: #5CE33B
+- background: #FFFFFF
+- surface: #F7F7F7
+- text: #111111
+- muted: #888888
+- accent: #E2E2E2
+- success: #8A9A86
+- danger: #BA1A1A
+
+Typography:
+- headings: Space Grotesk
+- body: Inter or close fallback
+
+UI rules:
+- white background
+- black text
+- muted gray surfaces
+- green only for progress, success, active state
+- sharp corners
+- minimal shadows
+- large typography
+- clean spacing
+- no overly playful/bubbly components
+
+================================================
+SECTION H — NAVIGATION REQUIREMENTS
+================================================
+
+Navigation flow:
+
+1. unauthenticated user
+   -> sign in / sign up flow
+
+2. authenticated user with no selected challenge
+   -> select challenge flow
+
+3. authenticated user with selected challenge
+   -> main tabs
+
+Tabs:
+- Home
+- Plan
+- Progress
+- Profile
+
+Stack screens:
+- Workout Detail
+- Select Challenge if needed later
+
+================================================
+SECTION I — SCREEN REQUIREMENTS
+================================================
+
+1. SIGN IN SCREEN
+- email field
+- password field
+- sign in CTA
+- navigation to sign up
+- simple validation
+- local/mock auth for V1
+
+2. SIGN UP SCREEN
+- full name
+- email
+- password
+- create account CTA
+- navigation to sign in
+- simple validation
+- local/mock auth for V1
+
+3. SELECT CHALLENGE SCREEN
+- challenge cards rendered from seed data
+- user can select one
+- confirm challenge CTA
+- selected challenge persists locally
+- only Sprint Triathlon is fully usable in V1
+
+4. HOME SCREEN
+- show current date
+- show today's workout
+- large workout title
+- show target time, target distance, and discipline
+- CTA to view workout
+- if rest day, show rest day state
+- if completed, show completed state
+- should derive workout from plan start date + current date
+
+5. WEEKLY PLAN SCREEN
+- show current week
+- list workouts for the week in order
+- each row/card shows:
+  - day
+  - discipline
+  - title
+  - target time
+  - target distance
+  - completed status
+- tap opens workout detail
+
+6. WORKOUT DETAIL SCREEN
+- title
+- discipline
+- description
+- target time
+- target distance
+- notes/instructions
+- form to log:
+  - actual time
+  - actual distance
+  - completed
+  - notes
+- save locally
+- validate non-negative values
+
+7. PROGRESS SCREEN
+- weekly summary
+- total target time
+- total actual time
+- total target distance
+- total actual distance
+- completion rate
+- completed sessions
+- chart(s) for progress
+- chart(s) for target vs actual
+
+8. PROFILE SCREEN
+- simple placeholder in V1
+- show selected challenge
+- show plan start date
+- include reset local data action if useful
+
+================================================
+SECTION J — CORE BUSINESS LOGIC
+================================================
+
+Codex must implement reusable functions for:
+
+- getCurrentTrainingWeek(startDate, today)
+- getWorkoutForDate(plan, date)
+- getWeekWorkouts(plan, weekNumber)
+- getWorkoutLog(workoutId)
+- calculateWorkoutCompletion(workout, log)
+- calculateWeeklySummary(workouts, logs)
+- calculateProgressPercent(target, actual)
+- groupWorkoutsByWeek(workouts)
+
+Rules:
+1. Progress calculations must support workouts with:
+   - only duration
+   - only distance
+   - both
+   - neither
+2. Rest and mobility should still display cleanly.
+3. Week 1 has no previous-week comparison requirement in V1 unless easy to add.
+4. Home screen should show today's workout based on plan start date logic.
+5. Weekly summaries must be computed from workouts + logs, not hardcoded.
+
+================================================
+SECTION K — STATE MANAGEMENT
+================================================
+
+Create Zustand stores:
+
+1. authStore
+- user
+- isAuthenticated
+- signIn
+- signOut
+- signUp
+
+2. appStore
+- selectedChallengeId
+- activePlanId
+- planStartDate
+- selectChallenge
+- resetAppData
+
+3. workoutStore
+- logs keyed by workoutId
+- saveWorkoutLog
+- markComplete
+- resetWorkoutLog
+
+Persistence:
+- persist relevant state using AsyncStorage
+
+================================================
+SECTION L — REPOSITORIES / ADAPTERS
+================================================
+
+Codex must abstract data access.
+
+Create:
+- challengeRepository
+- trainingPlanRepository
+- workoutRepository
+- progressRepository
+- localStorageAdapter
+
+Goal:
+- V1 uses AsyncStorage
+- later backend/storage swap should be easy
+
+================================================
+SECTION M — REUSABLE COMPONENTS
+================================================
+
+Create reusable UI components first.
+
+Required UI components:
+- Screen
+- Button
+- Text
+- Input
+- Card
+- StatRow
+- ProgressBar
+- EmptyState
+- IconButton
+- BottomNav
+- Chip
+
+Required domain components:
+- ChallengeCard
+- WorkoutCard
+- WorkoutMetaRow
+- CompletionBadge
+- TodayWorkoutHero
+- WeeklyWorkoutList
+- WorkoutLogForm
+- WeeklySummaryCard
+- SummaryStatCard
+
+Required chart components:
+- WeeklyTimeChart
+- WeeklyDistanceChart
+- CompletionChart
+
+================================================
+SECTION N — IMPLEMENTATION ORDER
+================================================
+
+Codex must build in this order.
+
+PHASE 1 — PROJECT SETUP
+1. Initialize Expo app with TypeScript
+2. Create a minimal Hello World screen and confirm the Expo app runs correctly before continuing
+3. Install Expo Router and configure navigation
+4. Install Zustand
+5. Install AsyncStorage
+6. Install NativeWind
+7. Install React Hook Form + Zod
+8. Install react-native-svg + victory-native
+9. Add fonts and theme setup
+10. Create folder structure
+11. Add base tsconfig / aliases if needed
+
+PHASE 2 — DOMAIN + DATA
+11. Create domain entities/types
+12. Create constants and theme tokens
+13. Create sports seed
+14. Create challenge seed
+15. Create Phase 1 triathlon seed
+16. Create repositories
+17. Create storage adapter
+18. Create utility functions for date/progress/metrics
+
+PHASE 3 — STATE
+19. Create auth store
+20. Create app store
+21. Create workout store
+22. Add persistence wiring
+23. Test that state survives app reload
+
+PHASE 4 — REUSABLE UI
+24. Build Screen
+25. Build Button
+26. Build Text
+27. Build Input
+28. Build Card
+29. Build ProgressBar
+30. Build stat and badge components
+31. Build BottomNav
+32. Build ChallengeCard
+33. Build WorkoutCard
+34. Build chart wrapper components
+
+PHASE 5 — SCREENS
+35. Build Sign In
+36. Build Sign Up
+37. Build Select Challenge
+38. Build Home
+39. Build Weekly Plan
+40. Build Workout Detail
+41. Build Progress
+42. Build Profile placeholder
+
+PHASE 6 — CONNECT LOGIC
+43. Connect auth flow to app state
+44. Connect challenge selection to app state
+45. Connect seeded plan to selected challenge
+46. Connect Home to today's workout logic
+47. Connect Weekly Plan to current week logic
+48. Connect Workout Detail to logging form
+49. Connect Progress screen to computed summary
+50. Make all logs persist locally
+
+PHASE 7 — POLISH
+51. Match spacing and typography to design
+52. Improve empty states
+53. Improve loading states
+54. Improve completed/rest states
+55. Remove duplicated logic
+56. Refactor naming and types
+57. Add comments only where useful
+58. Verify iOS and Android compatibility
+
+PHASE 8 — DOCUMENTATION
+59. Add README
+60. Explain architecture
+61. Explain how to add a new sport
+62. Explain how to add a new challenge
+63. Explain how to add a new training plan
+64. Explain persistence strategy
+65. Explain future backend integration points
+
+================================================
+SECTION O — MICRO TASK CHECKLIST
+================================================
+
+Codex should use this checklist and complete each item.
+
+FOUNDATION
+[ ] Create Expo + TS app
+[ ] Create a basic Hello World screen
+[ ] Verify the Expo app runs successfully before proceeding
+[ ] Configure Expo Router
+[ ] Install libraries
+[ ] Configure NativeWind
+[ ] Add fonts
+[ ] Add theme tokens
+[ ] Create src structure
+
+DOMAIN
+[ ] Add Sport type
+[ ] Add Workout type
+[ ] Add WorkoutLog type
+[ ] Add Challenge type
+[ ] Add TrainingPlan type
+[ ] Add ProgressSummary type
+
+SEED DATA
+[ ] Add sports seed
+[ ] Add challenges seed
+[ ] Add 8-week Phase 1 triathlon seed
+
+UTILS / SERVICES
+[ ] Add date helpers
+[ ] Add formatting helpers
+[ ] Add progress helpers
+[ ] Add weekly summary logic
+[ ] Add current week logic
+[ ] Add today workout logic
+
+DATA LAYER
+[ ] Add repositories
+[ ] Add AsyncStorage adapter
+[ ] Add persistence helpers
+
+STATE
+[ ] Add auth store
+[ ] Add app store
+[ ] Add workout store
+[ ] Persist stores
+
+UI COMPONENTS
+[ ] Add Screen
+[ ] Add Button
+[ ] Add Text
+[ ] Add Input
+[ ] Add Card
+[ ] Add ProgressBar
+[ ] Add Badge / Chip
+[ ] Add BottomNav
+[ ] Add ChallengeCard
+[ ] Add WorkoutCard
+[ ] Add Summary cards
+[ ] Add chart wrappers
+
+SCREENS
+[ ] Build sign in
+[ ] Build sign up
+[ ] Build select challenge
+[ ] Build home
+[ ] Build weekly plan
+[ ] Build workout detail
+[ ] Build progress
+[ ] Build profile
+
+WIRING
+[ ] Wire auth
+[ ] Wire challenge selection
+[ ] Wire current plan
+[ ] Wire today's workout
+[ ] Wire workout logging
+[ ] Wire progress calculations
+[ ] Wire persistence
+
+POLISH
+[ ] Improve styling
+[ ] Improve UX states
+[ ] Test navigation
+[ ] Test persistence
+[ ] Refactor code duplication
+[ ] Clean types
+
+DOCS
+[ ] Add README
+[ ] Add extension instructions
+
+================================================
+SECTION P — ACCEPTANCE CRITERIA
+================================================
+
+V1 is complete when:
+
+1. User can sign up locally.
+2. User can sign in locally.
+3. User can select a challenge.
+4. Selected challenge persists after app restart.
+5. Home screen shows today's workout from seeded plan logic.
+6. Weekly plan shows current week's workouts.
+7. Workout detail shows target values and lets user log actual values.
+8. User can mark a workout complete.
+9. Progress screen shows computed weekly totals and charts.
+10. Workout logs persist after app restart.
+11. Code is modular and scalable for future sports and plans.
+12. The app runs on both iPhone and Android through Expo.
+
+================================================
+SECTION Q — FUTURE-PROOFING NOTES
+================================================
+
+Codex must leave good extension points for future versions.
+
+V2+ likely features:
+- more challenges
+- more sports
+- multiple phases
+- editable schedule
+- notifications
+- backend auth
+- cloud sync
+- analytics
+- adaptive training
+- integrations with Apple Health / Garmin / Strava
+
+So:
+- repositories should remain abstract
+- domain should remain generic
+- plan logic should not assume one challenge forever
+- UI should remain data-driven
+- chart components should accept generic datasets
+- stores should stay separated by concern
+
+================================================
+SECTION R — FINAL CODING STANDARD
+================================================
+
+Codex must ensure:
+- clean TypeScript
+- no giant files unless necessary
+- no repeated hardcoded values
+- meaningful naming
+- scalable structure
+- minimal but useful comments
+- reusable components
+- readable hooks and services
+- no mixing styling, business logic, and data access in one place
+
+End of document.

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Steady Pace - Home Dashboard</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#5ce33b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#142111",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light text-background-dark font-display antialiased">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light group/design-root overflow-x-hidden">
+<!-- Shared Bottom Nav Block (Modified colors and injected Material Symbols) -->
+<!-- Structure kept intact as per library, except for required icon replacements and color tokens -->
+<div class="flex gap-2 border-t border-gray-200 bg-background-light px-4 pb-3 pt-2 order-last mt-auto">
+<a class="just flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-background-dark" href="#">
+<div class="text-background-dark flex h-8 items-center justify-center" data-icon="home" data-size="24px" data-weight="fill">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+</div>
+<p class="text-background-dark text-xs font-medium leading-normal tracking-[0.015em]">HOME</p>
+</a>
+<a class="just flex flex-1 flex-col items-center justify-end gap-1 text-gray-400" href="#">
+<div class="text-gray-400 flex h-8 items-center justify-center" data-icon="calendar_today" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">calendar_today</span>
+</div>
+<p class="text-gray-400 text-xs font-medium leading-normal tracking-[0.015em]">PLAN</p>
+</a>
+<a class="just flex flex-1 flex-col items-center justify-end gap-1 text-gray-400" href="#">
+<div class="text-gray-400 flex h-8 items-center justify-center" data-icon="bar_chart" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">bar_chart</span>
+</div>
+<p class="text-gray-400 text-xs font-medium leading-normal tracking-[0.015em]">PROGRESS</p>
+</a>
+</div>
+<!-- Page Content Container -->
+<div class="flex flex-col items-center justify-center flex-grow px-6 py-12">
+<p class="text-gray-500 text-[12px] font-medium leading-normal pb-4 pt-1 px-4 text-center tracking-[0.15em] uppercase">TUESDAY, OCT 12</p>
+<h1 class="text-background-dark tracking-tight text-[48px] font-semibold leading-tight px-4 text-center pb-6">Base Run</h1>
+<!-- Metadata Strip -->
+<p class="text-gray-500 text-[14px] font-medium tracking-widest uppercase mb-12 text-center">
+            45 MIN <span class="mx-2 text-gray-300">/</span> ZONE 2 <span class="mx-2 text-gray-300">/</span> 5KM
+        </p>
+<!-- Primary Action -->
+<button class="w-full max-w-[280px] border border-background-dark bg-transparent text-background-dark font-medium text-[14px] tracking-[0.05em] uppercase py-4 rounded hover:bg-background-dark hover:text-background-light transition-colors duration-200">
+            VIEW WORKOUT
+        </button>
+</div>
+</div>
+</body></html>
