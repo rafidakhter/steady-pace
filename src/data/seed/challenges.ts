@@ -27,5 +27,14 @@ export const challengesSeed: Challenge[] = [
     level: "beginner",
     name: "Sprint Triathlon",
     planId: "phase1-triathlon-plan"
+  },
+  {
+    category: "custom",
+    description: "Track a target weight alongside your training plan, or use it as a standalone body composition focus.",
+    estimatedDurationLabel: "Self paced",
+    id: "weight-loss",
+    level: "beginner",
+    name: "Weight Loss",
+    planId: "weight-loss-goal"
   }
 ];

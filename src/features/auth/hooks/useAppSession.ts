@@ -42,9 +42,10 @@ export function useAppSession(): AppSessionState {
   const selectedChallengeId = useAppStore((state) => state.selectedChallengeId);
   const activePlanId = useAppStore((state) => state.activePlanId);
   const planStartDate = useAppStore((state) => state.planStartDate);
+  const weightLossGoal = useAuthStore((state) => state.user?.details?.weightLossGoal);
 
   return {
-    hasActivePlan: Boolean(selectedChallengeId && activePlanId && planStartDate),
+    hasActivePlan: Boolean(selectedChallengeId && planStartDate && (activePlanId || weightLossGoal)),
     hydrated: authHydrated && appHydrated && workoutHydrated,
     isAuthenticated,
     selectedChallengeId

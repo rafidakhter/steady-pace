@@ -9,9 +9,13 @@ export const challengeSelectionService = {
       return null;
     }
 
+    if (challenge.id === "weight-loss") {
+      return null;
+    }
+
     return challenge.planId === phase1TriathlonPlan.id ? phase1TriathlonPlan : null;
   },
   isChallengeSelectable(challengeId: string) {
-    return challengeId === "sprint-triathlon";
+    return challengeId === "sprint-triathlon" || challengeId === "weight-loss";
   }
 };

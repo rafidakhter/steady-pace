@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kinetic - Select Challenge</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#ffffff",
+                    "inverse-primary": "#5ce33b",
+                    "on-secondary-fixed": "#ffffff",
+                    "on-background": "#111111",
+                    "tertiary-fixed": "#e2e2e2",
+                    "on-tertiary-fixed-variant": "#111111",
+                    "primary-container": "#5ce33b",
+                    "inverse-on-surface": "#f6f8f6",
+                    "tertiary": "#888888",
+                    "surface-container": "#f7f7f7",
+                    "outline-variant": "#888888",
+                    "surface-container-high": "#e2e2e2",
+                    "primary-fixed": "#5ce33b",
+                    "on-secondary-fixed-variant": "#ffffff",
+                    "on-primary-fixed": "#111111",
+                    "tertiary-container": "#e2e2e2",
+                    "primary-fixed-dim": "#5ce33b",
+                    "on-tertiary-container": "#111111",
+                    "on-primary": "#111111",
+                    "on-primary-container": "#111111",
+                    "surface-container-highest": "#888888",
+                    "surface-bright": "#ffffff",
+                    "surface-container-low": "#f6f8f6",
+                    "secondary-fixed": "#111111",
+                    "background": "#ffffff",
+                    "on-primary-fixed-variant": "#111111",
+                    "secondary-container": "#f7f7f7",
+                    "primary": "#5ce33b",
+                    "outline": "#e2e2e2",
+                    "error": "#ba1a1a",
+                    "surface-variant": "#f7f7f7",
+                    "on-tertiary": "#ffffff",
+                    "surface-dim": "#f6f8f6",
+                    "secondary": "#111111",
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#142111",
+                    "on-surface": "#111111",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary-fixed-dim": "#888888",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#111111",
+                    "on-secondary-container": "#111111",
+                    "on-error": "#ffffff",
+                    "surface-tint": "#5ce33b",
+                    "secondary-fixed-dim": "#111111",
+                    "on-secondary": "#ffffff",
+                    "on-surface-variant": "#888888"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {},
+            "fontFamily": {
+                    "headline": [
+                            "Space Grotesk"
+                    ],
+                    "body": [
+                            "Inter"
+                    ],
+                    "label": [
+                            "Space Grotesk"
+                    ]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        /* Kinetic Mono Specific Resets & Utilities */
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        /* Hide scrollbar for clean look but allow scrolling */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Custom date picker styling to fit brutalist theme */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-40 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-md flex justify-between items-center px-6 h-16 border-b-2 border-zinc-100 dark:border-zinc-900 shadow-none">
+<button class="text-zinc-500 hover:text-[#5ce33b] transition-colors active:opacity-70 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
+</button>
+<div class="text-2xl font-['Space_Grotesk'] font-bold tracking-tighter text-zinc-900 dark:text-zinc-50">
+            KINETIC
+        </div>
+<button class="w-8 h-8 rounded-full overflow-hidden border border-outline hover:border-[#5ce33b] transition-colors active:opacity-70">
+<!-- Using a generic placeholder as requested by standard practices when specific assets aren't provided, styled appropriately -->
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="close-up portrait of young athletic woman with neutral expression against plain light background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvdXmpPA6_-NNOgKjIwknJD3Dfj64kZ0nX94k1epsmmrj0dTm4qGSomUXXzyy8oKZzvr3JISmoH380Jp2Nc49-OVx9IyYUG3_Dg8ZOSGyU0ZxRFjD0CTz0Mr6lRLu5oRaId18CSRo-Q5pw1AfD6dCFiI2bH3vK2NW3KRY00lhQKIS-XBmqZE2ggDwkrkzizRSwPzr4cLuy_Z0t4m4GJsHjVUrNSmFxVr6N06SsNSAesx5gmzVbceK7u9qfV-8wT3QQZbF4BPgb4cw"/>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 px-6 max-w-2xl mx-auto space-y-8">
+<!-- Header -->
+<div>
+<span class="font-label text-[10px] tracking-widest text-on-surface-variant uppercase block mb-2">Phase 01</span>
+<h1 class="font-headline text-4xl font-bold tracking-tight uppercase leading-none">Select Challenge</h1>
+<p class="font-body text-sm text-on-surface-variant mt-3 max-w-md">Choose your primary focus. This will structure your weekly volume and interval intensities.</p>
+</div>
+<!-- Challenge Options List -->
+<div class="space-y-4">
+<!-- Inactive Option: 5K -->
+<div class="bg-surface-container p-5 flex justify-between items-center group cursor-pointer hover:bg-surface-container-high transition-colors">
+<div>
+<h3 class="font-headline text-xl font-bold tracking-tight uppercase">5K Prep</h3>
+<div class="flex items-center gap-3 mt-1">
+<span class="font-label text-[10px] tracking-widest text-on-surface-variant uppercase">8 Weeks</span>
+<div class="w-1 h-1 bg-outline rounded-full"></div>
+<span class="font-label text-[10px] tracking-widest text-on-surface-variant uppercase">High Intensity</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors" style="font-variation-settings: 'FILL' 0;">arrow_forward</span>
+</div>
+<!-- Active Option: 10K (Selected) -->
+<div class="relative bg-surface p-5 flex justify-between items-center cursor-default border-y border-r border-outline border-l-4 border-l-primary shadow-[0_2px_10px_-3px_rgba(0,0,0,0.05)]">
+<!-- Subtle background tint for active state -->
+<div class="absolute inset-0 bg-primary/5 pointer-events-none"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label text-[10px] tracking-widest text-primary uppercase font-bold">Selected Focus</span>
+</div>
+<h3 class="font-headline text-2xl font-bold tracking-tight uppercase">10K Builder</h3>
+<div class="flex items-center gap-3 mt-1">
+<span class="font-label text-[10px] tracking-widest text-on-surface uppercase">12 Weeks</span>
+<div class="w-1 h-1 bg-on-surface rounded-full"></div>
+<span class="font-label text-[10px] tracking-widest text-on-surface uppercase">Endurance + Threshold</span>
+</div>
+</div>
+</div>
+<!-- Inactive Option: Half Marathon -->
+<div class="bg-surface-container p-5 flex justify-between items-center group cursor-pointer hover:bg-surface-container-high transition-colors">
+<div>
+<h3 class="font-headline text-xl font-bold tracking-tight uppercase">Half Marathon</h3>
+<div class="flex items-center gap-3 mt-1">
+<span class="font-label text-[10px] tracking-widest text-on-surface-variant uppercase">16 Weeks</span>
+<div class="w-1 h-1 bg-outline rounded-full"></div>
+<span class="font-label text-[10px] tracking-widest text-on-surface-variant uppercase">Volume Focused</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors" style="font-variation-settings: 'FILL' 0;">arrow_forward</span>
+</div>
+</div>
+<!-- Structural Divider -->
+<hr class="border-t border-outline"/>
+<!-- Weight Loss Goal Section -->
+<div>
+<div class="flex justify-between items-center mb-4">
+<div>
+<h3 class="font-headline text-lg font-bold tracking-tight uppercase">Body Composition</h3>
+<p class="font-body text-sm text-on-surface-variant mt-1">Integrate a weight metric into your training plan.</p>
+</div>
+</div>
+<!-- The "Toggle" block that triggered the modal (shown in active state here) -->
+<div class="bg-surface-container-high p-4 flex justify-between items-center border-l-2 border-on-surface cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface" style="font-variation-settings: 'FILL' 0;">monitor_weight</span>
+<span class="font-headline font-bold uppercase tracking-tight text-sm">Weight Goal Active</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label text-[10px] tracking-widest text-primary uppercase">Configured</span>
+<span class="material-symbols-outlined text-on-surface" style="font-variation-settings: 'FILL' 0;">edit</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-40 flex justify-around items-stretch px-4 pb-safe bg-white dark:bg-zinc-950 border-t-2 border-zinc-100 dark:border-zinc-900 h-20 shadow-none">
+<button class="flex-1 flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 pt-3 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors active:scale-95 duration-150 group">
+<span class="material-symbols-outlined mb-1 group-hover:text-zinc-500 transition-colors" style="font-variation-settings: 'FILL' 0;">home</span>
+<span class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[10px]">Home</span>
+</button>
+<!-- Active Tab: Plan -->
+<button class="flex-1 flex flex-col items-center justify-center text-zinc-900 dark:text-zinc-50 border-t-4 border-[#5ce33b] pt-2 active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined mb-1 text-[#5ce33b]" style="font-variation-settings: 'FILL' 1;">event_note</span>
+<span class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[10px] text-[#5ce33b]">Plan</span>
+</button>
+<button class="flex-1 flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 pt-3 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors active:scale-95 duration-150 group">
+<span class="material-symbols-outlined mb-1 group-hover:text-zinc-500 transition-colors" style="font-variation-settings: 'FILL' 0;">leaderboard</span>
+<span class="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[10px]">Progress</span>
+</button>
+</nav>
+<!-- MODAL OVERLAY: Add Weight Loss Goal 
+         (Rendered in active/open state as requested by the prompt to show the design) -->
+<div class="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
+<!-- Backdrop -->
+<div class="absolute inset-0 bg-zinc-900/40 backdrop-blur-sm"></div>
+<!-- Modal Content Canvas -->
+<div class="relative w-full sm:w-[480px] bg-surface border-t-4 border-primary sm:border-t-0 sm:border-l-[6px] sm:border-l-primary shadow-2xl pb-10 sm:pb-6">
+<!-- Modal Header -->
+<div class="flex justify-between items-center p-6 pb-4 border-b border-outline">
+<h2 class="font-headline text-2xl font-bold tracking-tight uppercase">Set Weight Target</h2>
+<button class="text-outline-variant hover:text-on-surface transition-colors p-2 -mr-2 active:opacity-70">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">close</span>
+</button>
+</div>
+<!-- Modal Body (Forms) -->
+<div class="p-6 space-y-6">
+<!-- Current Weight -->
+<div class="space-y-2">
+<label class="font-label text-[10px] tracking-widest text-on-surface-variant uppercase flex justify-between">
+<span>Current Weight</span>
+<span>LBS</span>
+</label>
+<div class="relative">
+<input class="w-full bg-surface-container border-0 border-l-2 border-transparent focus:border-primary focus:ring-0 px-4 py-4 font-headline text-2xl font-bold text-on-surface placeholder:text-outline-variant transition-colors outline-none rounded-none" placeholder="0.0" type="number" value="185.5"/>
+</div>
+</div>
+<!-- Goal Weight -->
+<div class="space-y-2">
+<label class="font-label text-[10px] tracking-widest text-on-surface-variant uppercase flex justify-between">
+<span>Target Weight</span>
+<span>LBS</span>
+</label>
+<div class="relative">
+<input class="w-full bg-surface-container border-0 border-l-2 border-transparent focus:border-primary focus:ring-0 px-4 py-4 font-headline text-2xl font-bold text-on-surface placeholder:text-outline-variant transition-colors outline-none rounded-none" placeholder="0.0" type="number"/>
+</div>
+</div>
+<!-- Target Date (Brutalist Date Picker Style) -->
+<div class="space-y-2">
+<label class="font-label text-[10px] tracking-widest text-on-surface-variant uppercase">Target Date</label>
+<div class="relative bg-surface-container group flex items-center border-l-2 border-transparent focus-within:border-primary transition-colors">
+<input class="w-full bg-transparent border-0 focus:ring-0 px-4 py-4 font-headline text-lg font-bold text-on-surface outline-none rounded-none relative z-10" type="date"/>
+<span class="material-symbols-outlined absolute right-4 text-outline-variant group-focus-within:text-primary z-0" style="font-variation-settings: 'FILL' 0;">calendar_month</span>
+</div>
+</div>
+</div>
+<!-- Modal Footer / CTA -->
+<div class="px-6 pt-2">
+<button class="w-full bg-primary text-on-primary py-4 px-6 font-headline text-lg font-bold tracking-widest uppercase hover:bg-opacity-90 active:scale-[0.98] transition-all flex justify-center items-center gap-2">
+<span>Lock In Target</span>
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</body></html>

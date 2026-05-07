@@ -2,9 +2,10 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 import { createPersistStorage } from "@/data/adapters/localStorageAdapter";
-import { User } from "@/domain/entities/User";
+import { User, UserDetails } from "@/domain/entities/User";
 
 interface AuthRecord {
+  details?: UserDetails;
   email: string;
   id: string;
   name: string;
@@ -26,11 +27,13 @@ interface AuthStoreState {
   signIn: (input: SignInInput) => { ok: boolean; error?: string };
   signOut: () => void;
   signUp: (input: SignUpInput) => { ok: boolean; error?: string };
+  updateUserDetails: (details: UserDetails) => void;
   user: User | null;
 }
 
 function toPublicUser(record: AuthRecord): User {
   return {
+    details: record.details,
     email: record.email,
     id: record.id,
     name: record.name
@@ -91,6 +94,37 @@ export const useAuthStore = create<AuthStoreState>()(
         }));
 
         return { ok: true };
+      },
+      updateUserDetails: (details) => {
+        const currentUser = get().user;
+
+        if (!currentUser) {
+          return;
+        }
+
+        const normalizedEmail = normalizeEmail(currentUser.email);
+        const existingRecord = get().registeredUsers[normalizedEmail];
+
+        if (!existingRecord) {
+          return;
+        }
+
+        const nextDetails = {
+          ...existingRecord.details,
+          ...details
+        };
+        const nextRecord = {
+          ...existingRecord,
+          details: nextDetails
+        };
+
+        set((state) => ({
+          registeredUsers: {
+            ...state.registeredUsers,
+            [normalizedEmail]: nextRecord
+          },
+          user: toPublicUser(nextRecord)
+        }));
       },
       user: null
     }),

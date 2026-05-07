@@ -16,7 +16,8 @@ import { AuthScreenShell } from "./AuthScreenShell";
 export function SignUpScreen() {
   const router = useRouter();
   const signUp = useAuthStore((state) => state.signUp);
-  const hasActivePlan = useAppStore((state) => Boolean(state.selectedChallengeId && state.activePlanId && state.planStartDate));
+  const weightLossGoal = useAuthStore((state) => state.user?.details?.weightLossGoal);
+  const hasActivePlan = useAppStore((state) => Boolean(state.selectedChallengeId && state.planStartDate && (state.activePlanId || weightLossGoal)));
   const { hydrated, isAuthenticated } = useAppSession();
   const [submitError, setSubmitError] = useState<string | null>(null);
   const {
